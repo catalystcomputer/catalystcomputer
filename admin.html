@@ -10,7 +10,7 @@
     <h2>Admin Panel</h2>
     <button onclick="location.href='index.html'" style="margin-bottom:16px;width:100%;background:#5C6AC4;">Back to Home</button>
     <div id="adminArea" style="display:none;">
-      <h3>Registered Batch User</h3>
+      <h3>Registered Batch Users</h3>
       <div id="usersList"></div>
       <button onclick="clearUsers()">Delete All Users</button>
       <button onclick="logoutAdmin()" style="background:#d32f2f;">Logout</button>
@@ -49,22 +49,24 @@
     const ADMIN_PASSWORD = "catalyst123";
 
     function showUsers() {
-      const user = JSON.parse(localStorage.getItem('batchUser'));
+      const users = JSON.parse(localStorage.getItem('batchUsers') || '[]');
       const listDiv = document.getElementById('usersList');
-      if (user) {
-        listDiv.innerHTML = `
-          <b>Name:</b> ${user.name} <br>
-          <b>Phone:</b> ${user.phone} <br>
-          <b>Batch ID:</b> ${user.id} <br>
-          <b>Password:</b> ${user.pass}
-        `;
+      if (users.length) {
+        listDiv.innerHTML = users.map(user => `
+          <div style="margin-bottom:15px;padding-bottom:10px;border-bottom:1px solid #eee;">
+            <b>Name:</b> ${user.name} <br>
+            <b>Phone:</b> ${user.phone} <br>
+            <b>Batch ID:</b> ${user.id} <br>
+            <b>Password:</b> ${user.pass}
+          </div>
+        `).join('');
       } else {
         listDiv.textContent = "No registered users found.";
       }
     }
 
     function clearUsers() {
-      localStorage.removeItem('batchUser');
+      localStorage.removeItem('batchUsers');
       showUsers();
       alert("All users deleted!");
     }
@@ -118,43 +120,42 @@
     const addCourseForm = document.getElementById('addCourseForm');
     if (addCourseForm) {
       addCourseForm.onsubmit = function(e) {
-  e.preventDefault();
-  const name = this.courseName.value.trim();
-  const details = this.courseDetails.value.trim();
-  const thumb = this.courseThumb.value.trim();
-  const videos = this.courseVideos.value.split(',').map(v => v.trim()).filter(v => v);
+        e.preventDefault();
+        const name = this.courseName.value.trim();
+        const details = this.courseDetails.value.trim();
+        const thumb = this.courseThumb.value.trim();
+        const videos = this.courseVideos.value.split(',').map(v => v.trim()).filter(v => v);
 
-  if (!name || !details || !thumb || videos.length === 0) {
-    document.getElementById('courseMsg').textContent = "Fill all fields and at least 1 video!";
-    return false;
-  }
+        if (!name || !details || !thumb || videos.length === 0) {
+          document.getElementById('courseMsg').textContent = "Fill all fields and at least 1 video!";
+          return false;
+        }
 
-  const courses = getCourses();
-  const editingIdx = this.dataset.editing;
+        const courses = getCourses();
+        const editingIdx = this.dataset.editing;
 
-  if (editingIdx !== undefined) {
-    courses[editingIdx] = { name, details, thumb, videos };
-    document.getElementById('courseMsg').textContent = "Course updated!";
-    addCourseForm.querySelector('button[type="submit"]').textContent = "Upload Course";
-    delete this.dataset.editing;
-  } else {
-    courses.push({ name, details, thumb, videos });
-    document.getElementById('courseMsg').textContent = "Course uploaded!";
-  }
-  
+        if (editingIdx !== undefined) {
+          courses[editingIdx] = { name, details, thumb, videos };
+          document.getElementById('courseMsg').textContent = "Course updated!";
+          addCourseForm.querySelector('button[type=\"submit\"]').textContent = "Upload Course";
+          delete this.dataset.editing;
+        } else {
+          courses.push({ name, details, thumb, videos });
+          document.getElementById('courseMsg').textContent = "Course uploaded!";
+        }
 
-  localStorage.setItem('courses', JSON.stringify(courses));
-  showCourses();
-  this.reset();
-};
+        localStorage.setItem('courses', JSON.stringify(courses));
+        showCourses();
+        this.reset();
+      };
     }
     function deleteAllCourses() {
-  if (confirm("Are you sure you want to delete all courses?")) {
-    localStorage.removeItem('courses');
-    showCourses();
-    document.getElementById('courseMsg').textContent = "All courses deleted!";
-  }
-}
+      if (confirm("Are you sure you want to delete all courses?")) {
+        localStorage.removeItem('courses');
+        showCourses();
+        document.getElementById('courseMsg').textContent = "All courses deleted!";
+      }
+    }
   </script>
 </body>
 </html>
