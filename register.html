@@ -59,7 +59,12 @@
       }
       const id = generateBatchId();
       const pass = generatePassword();
-      localStorage.setItem('batchUser', JSON.stringify({ name, phone, id, pass }));
+     // Save all users in array
+const users = JSON.parse(localStorage.getItem('batchUsers') || '[]');
+users.push({ name, phone, id, pass });
+localStorage.setItem('batchUsers', JSON.stringify(users));
+// (Optional) Also set latest for direct login
+localStorage.setItem('batchUser', JSON.stringify({ name, phone, id, pass }));
       const msg = `
         <b>Your Batch ID:</b> <span style="color:#5C6AC4">${id}</span><br>
         <b>Password:</b> <span style="color:#5C6AC4">${pass}</span><br>
