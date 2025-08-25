@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>CATALYST COMPUTER INSTITUTE</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <script src="script.js"></script>
+  <body
+    <header>
+        
+         
+
+      <h1 class="title">cataylst Computer Institute</h1>
+      <nav>
+        
+        <img src="https://uploads.onecompiler.io/43u2eur9b/43u2exxd4/Learn,%20Grow,%20Succeed.png" alt="Institute Logo" class="logo" />
+        
+        <a href="#courses">Courses</a>
+        <a href="#contact">Contact</a>
+        <a href="#about">About</a>
+        <a href="#login-register">login-form</a>
+        <a href="admin.html" style="color:#ffd700;font-weight:bold;">Admin Login</a> <!-- Add this line -->
+        <marquee behavior="scroll" direction="left" style="background:#5C6AC4;color:#fff;padding:8px 0;font-weight:bold;border-radius:4px;">
+  Welcome to CATAYLST COMPUTER INSTITUTE! Admissions open for new batches. Call 7463928290 / 7372090746 for details.
+</marquee>
+
+      </nav>
+    </header>
+    
+    
+    <section id="courses">
+      <h2>Our Courses</h2>
+      <ul>
+        <li>Basic Computer Skills</li>
+        
+  <a href="login.html" style="color:#5C6AC4;">View Details</a>
+</li>
+
+        <li>DCA</li>
+        <a href="login.html" style="color:#5C6AC4;">View Details</a>
+</li>
+
+        <li>ADCA</li>
+        <a href="login.html" style="color:#5C6AC4;">View Details</a>
+</li>
+
+        <li>CTTC</li>
+        <a href="login.html" style="color:#5C6AC4;">View Details</a>
+</li>
+
+        <li>TALLY</li>
+        <a href="login.html" style="color:#5C6AC4;">View Details</a>
+</li>
+
+        <li>TYPING</li>
+        <a href="login.html" style="color:#5C6AC4;">View Details</a>
+</li>
+
+        <li>Web Development</li>
+        <li>Programming Languages (Python, Java, C++)</li>
+        <li>Graphic Design</li>
+        <li>MS Office & Productivity</li>
+      
+
+      </ul>
+    </section>
+    <section id="contact">
+      <h2>Contact Us</h2>
+      <form>
+        <label>Name: <input type="text" name="name" /></label><br />
+        <label>Phone: <input type="Phone" name="Phone" /></label><br />
+        <label>Message:<br /><textarea name="message"></textarea></label><br />
+        <button type="submit">Send</button>
+        <div id="contactThanksPopup" style="display:none; position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(0,0,0,0.4); z-index:9999;">
+  <div style="background:#fff; padding:30px; border-radius:8px; max-width:300px; margin:120px auto; text-align:center; box-shadow:0 4px 16px #aaa;">
+    <h3 style="color:#5C6AC4;">Thank You!</h3>
+    <p>Your message has been submitted. We appreciate your interest!</p>
+    <button onclick="document.getElementById('contactThanksPopup').style.display='none';" style="width:90%;background:#5C6AC4;">Close</button>
+  </div>
+</div>
+      </form>
+      <section id="about">
+      <h2>About Us</h2>
+      
+</div>
+      <p>
+        cataylst Computer Institute offers quality education in computer science and IT skills.
+        Our experienced instructors ensure practical learning for all age groups.
+      </p>
+      
+<div class="owner-details">
+  <img src="https://uploads.onecompiler.io/43u2eur9b/43u2exxd4/1753035232983.jpg" alt="Institute Owner" class="owner-photo" />
+  <h3>Mr. kunal verma</h3>
+  <p>Founder & Director</p>
+  <p>
+    With 5+ years of experience in IT training, Mr. verma is dedicated to empowering students with practical computer skills and career guidance.
+  </p>
+          <section id="login-register">
+            
+  <a href="register.html">Register</a>
+  <a href="login.html">login</a>
+  </div>
+    </section>
+      <p>Email: info@cataylstinstitute.com<br />Phone: 7463928290 <br />Phone: 7372090746 </p>
+      <marquee behavior="scroll" direction="left" style="background:#fff;padding:8px 0;border-radius:4px;">
+  <img src="https://uploads.onecompiler.io/43u2eur9b/43u2exxd4/iso.png"
+       alt="ISO Logo" style="height:50px;vertical-align:middle;margin-right:20px;">
+  <img src="https://msme.gov.in/sites/default/files/msme.png" 
+       alt="MSME Logo" style="height:50px;vertical-align:middle;">
+       <img src="https://uploads.onecompiler.io/43u2eur9b/43u2exxd4/skill%20india%20logo.jpg" 
+       alt="skill india Logo" style="height:50px;vertical-align:middle;">
+  <span style="color:#5C6AC4;font-weight:bold;margin-left:20px;">Certified by ISO & MSME</span>
+</marquee>
+    </section>
+    <footer style="background:#5C6AC4;color:#fff;text-align:center;padding:10px 0;margin-top:30px;border-radius:8px;">
+  All rights reserved &copy; 2025 CATAYLST COMPUTER INSTITUTE
+  
+</footer>
+
+
+</section>
+<script>
+document.querySelector('section#contact form').onsubmit = function(e) {
+  e.preventDefault();
+  document.getElementById('contactThanksPopup').style.display = 'block';
+  this.reset();
+};
+</script>
+  </body>
+
+ 
+</html>                                                                     

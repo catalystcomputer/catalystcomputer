@@ -1,0 +1,159 @@
+<!-- admin.html -->
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Admin Panel - CATALYST COMPUTER INSTITUTE</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <section>
+    <h2>Admin Panel</h2>
+    <button onclick="location.href='index.html'" style="margin-bottom:16px;width:100%;background:#5C6AC4;">Back to Home</button>
+    <div id="adminArea" style="display:none;">
+      <h3>Registered Batch User</h3>
+      <div id="usersList"></div>
+      <button onclick="clearUsers()">Delete All Users</button>
+      <button onclick="logoutAdmin()" style="background:#d32f2f;">Logout</button>
+      <button onclick="deleteAllCourses()" style="background:#d32f2f;color:#fff;margin-bottom:10px;width:100%;">Delete All Courses</button>
+      <h3>Add New Course</h3>
+      <form id="addCourseForm">
+        <label>Course Name: <input type="text" name="courseName" required></label><br>
+        <label>Details: <input type="text" name="courseDetails" required></label><br>
+        <label>Thumbnail Image URL: <input type="text" name="courseThumb" required></label><br>
+        <label>Video Links (comma separated): <input type="text" name="courseVideos" required></label><br>
+        <label>Course Rate: <input type="text" name="courseRate" required></label><br>
+       <label>Playlist Type: <input type="text" name="playlistType" required></label><br>
+       <label>Course Code: <input type="text" name="courseCode" required></label><br>
+        <button type="submit">Upload Course</button>
+      </form>
+      
+      <div id="courseMsg"></div>
+      <hr>
+      <h3>All Uploaded Courses</h3>
+      <ul id="coursesList"></ul>
+    </div>
+    <div id="loginArea">
+      <h3>Admin Login</h3>
+      <form id="adminLoginForm">
+        <label>Admin Username: <input type="text" name="username" required></label><br>
+        <label>Password: <input type="password" name="password" required></label><br>
+        <button type="submit">Login</button>
+      </form>
+      <p id="adminMsg"></p>
+    </div>
+  </section>
+  <script>
+    // Simple hardcoded admin credentials
+    const ADMIN_USERNAME = "admin";
+    const ADMIN_PASSWORD = "catalyst123";
+
+    function showUsers() {
+      const user = JSON.parse(localStorage.getItem('batchUser'));
+      const listDiv = document.getElementById('usersList');
+      if (user) {
+        listDiv.innerHTML = `
+          <b>Name:</b> ${user.name} <br>
+          <b>Phone:</b> ${user.phone} <br>
+          <b>Batch ID:</b> ${user.id} <br>
+          <b>Password:</b> ${user.pass}
+        `;
+      } else {
+        listDiv.textContent = "No registered users found.";
+      }
+    }
+
+    function clearUsers() {
+      localStorage.removeItem('batchUser');
+      showUsers();
+      alert("All users deleted!");
+    }
+
+    function logoutAdmin() {
+      sessionStorage.removeItem('isAdmin');
+      location.reload();
+    }
+
+    document.getElementById('adminLoginForm').onsubmit = function(e) {
+      e.preventDefault();
+      const username = this.username.value.trim();
+      const password = this.password.value;
+      if (username === ADMIN_USERNAME && password === ADMIN_PASSWORD) {
+        sessionStorage.setItem('isAdmin', 'true');
+        document.getElementById('loginArea').style.display = 'none';
+        document.getElementById('adminArea').style.display = 'block';
+        showUsers();
+        showCourses();
+      } else {
+        document.getElementById('adminMsg').textContent = "Invalid admin credentials!";
+      }
+    };
+
+    // Auto-login if session exists
+    if (sessionStorage.getItem('isAdmin') === 'true') {
+      document.getElementById('loginArea').style.display = 'none';
+      document.getElementById('adminArea').style.display = 'block';
+      showUsers();
+      showCourses();
+    }
+
+    // Course management
+    function getCourses() {
+      return JSON.parse(localStorage.getItem('courses') || '[]');
+    }
+    function showCourses() {
+      const list = document.getElementById('coursesList');
+      const courses = getCourses();
+      list.innerHTML = courses.length
+        ? courses.map(c =>
+          `<li>
+            <img src="${c.thumb}" alt="thumb" style="width:70px;height:50px;border-radius:8px;vertical-align:middle;margin-right:10px;">
+            <b>${c.name}</b>: ${c.details}<br>
+            ${c.videos.map((v,i) => `<a href="${v}" target="_blank">Video ${i+1}</a>`).join(' | ')}
+          </li>`
+        ).join('')
+        : "<li>No courses yet.</li>";
+    }
+
+    const addCourseForm = document.getElementById('addCourseForm');
+    if (addCourseForm) {
+      addCourseForm.onsubmit = function(e) {
+  e.preventDefault();
+  const name = this.courseName.value.trim();
+  const details = this.courseDetails.value.trim();
+  const thumb = this.courseThumb.value.trim();
+  const videos = this.courseVideos.value.split(',').map(v => v.trim()).filter(v => v);
+
+  if (!name || !details || !thumb || videos.length === 0) {
+    document.getElementById('courseMsg').textContent = "Fill all fields and at least 1 video!";
+    return false;
+  }
+
+  const courses = getCourses();
+  const editingIdx = this.dataset.editing;
+
+  if (editingIdx !== undefined) {
+    courses[editingIdx] = { name, details, thumb, videos };
+    document.getElementById('courseMsg').textContent = "Course updated!";
+    addCourseForm.querySelector('button[type="submit"]').textContent = "Upload Course";
+    delete this.dataset.editing;
+  } else {
+    courses.push({ name, details, thumb, videos });
+    document.getElementById('courseMsg').textContent = "Course uploaded!";
+  }
+  
+
+  localStorage.setItem('courses', JSON.stringify(courses));
+  showCourses();
+  this.reset();
+};
+    }
+    function deleteAllCourses() {
+  if (confirm("Are you sure you want to delete all courses?")) {
+    localStorage.removeItem('courses');
+    showCourses();
+    document.getElementById('courseMsg').textContent = "All courses deleted!";
+  }
+}
+  </script>
+</body>
+</html>

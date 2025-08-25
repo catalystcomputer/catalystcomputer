@@ -1,0 +1,45 @@
+<!-- login.html -->
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Login - CATALYST COMPUTER INSTITUTE</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+ <section>
+  <h2>Login to Access Batch Videos</h2>
+  <form id="loginForm">
+    <label>Batch ID: <input type="Batch ID" name="Batch ID" required /></label><br />
+    <label>Password: <input type="password" name="password" required /></label><br />
+    <button type="submit">Login</button>
+  </form>
+  <button onclick="location.href='index.html'" style="margin-top:12px;width:100%;background:#5C6AC4;">Back to Home</button>
+  <p id="loginMsg"></p>
+  <div id="wrongPopup" style="display:none; position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(0,0,0,0.4); z-index:9999;">
+    <div style="background:#fff; padding:30px; border-radius:8px; max-width:300px; margin:120px auto; text-align:center; box-shadow:0 4px 16px #aaa;">
+      <h3 style="color:#d32f2f;">Wrong Batch ID or Password</h3>
+      <button onclick="location.href='index.html'" style="margin:8px 0 8px 0;width:90%;background:#5C6AC4;">Back to Home</button>
+      <br>
+      <button onclick="location.href='register.html'" style="width:90%;background:#3949ab;">Register to Access Video</button>
+    </div>
+  </div>
+</section>
+<script>
+document.getElementById('loginForm').onsubmit = function(e) {
+  e.preventDefault();
+  const inputId = document.querySelector('input[name="Batch ID"]').value.trim();
+  const inputPass = document.querySelector('input[name="password"]').value;
+  const stored = JSON.parse(localStorage.getItem('batchUser'));
+  if (stored && inputId === stored.id && inputPass === stored.pass) {
+    document.getElementById('loginMsg').textContent = "Login successful! Redirecting...";
+    setTimeout(() => {
+      window.location.href = 'dashboard.html';
+    }, 1500);
+  } else {
+    document.getElementById('wrongPopup').style.display = "block";
+    document.getElementById('loginMsg').textContent = "";
+  }
+};
+</script>
+</body>
+</html>

@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+  <script>
+  const user = localStorage.getItem('batchUser');
+  if (!user) {
+    window.location.href = 'login.html'; // Redirect if not logged in
+  }
+</script>
+<head>
+  <title>Welcome - CATALYST COMPUTER INSTITUTE</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header>
+    <h1 class="title">Welcome to CATAYLST COMPUTER INSTITUTE</h1>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="index.html#courses">Courses</a>
+      <a href="index.html#videos">Videos</a>
+      <a href="index.html#contact">Contact</a>
+      <a href="index.html#about">About</a>
+    </nav>
+  </header>
+  <section>
+    <h2>Welcome!</h2>
+    <p>You have successfully logged in or registered.</p>
+   <section>
+  <h2>All Courses</h2>
+  <ul id="coursesList"></ul>
+  
+  <h3>Enter Course Code To Learn</h3>
+  <form id="codeForm">
+    <label>Course Code: <input type="text" name="courseCode" required /></label>
+    <button type="submit">Unlock Course</button>
+  </form>
+  <div id="codeMsg"></div>
+  <div id="wrongCodePopup" style="display:none; position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(0,0,0,0.4); z-index:9999;">
+    <div style="background:#fff; padding:30px; border-radius:8px; max-width:300px; margin:120px auto; text-align:center; box-shadow:0 4px 16px #aaa;">
+      <h3 style="color:#d32f2f;">Wrong Code!</h3>
+      <p>Please contact your education partner.</p>
+      <button onclick="document.getElementById('wrongCodePopup').style.display='none';" style="width:90%;background:#5C6AC4;">Close</button>
+    </div>
+  </div>
+</section>
+<script>
+function getCourses() {
+  return JSON.parse(localStorage.getItem('courses') || '[]');
+}
+
+function showCourses() {
+  const list = document.getElementById('coursesList');
+  const courses = getCourses();
+  list.innerHTML = courses.length
+    ? courses.map((c, idx) => `
+      <li style="margin-bottom:18px;">
+        <img src="${c.thumb}" alt="thumb" style="width:70px;height:50px;border-radius:8px;vertical-align:middle;margin-right:10px;">
+        <b>${c.name}</b> <br>
+        <span>Details:</span> ${c.details} <br>
+        <span>Rate:</span> ${c.rate || 'N/A'} <br>
+        <span>Playlist Type:</span> ${c.playlistType || 'N/A'} <br>
+        <span>Course Code:</span> <b>${c.courseCode || 'N/A'}</b> <br>
+        ${c.videos && c.videos.length ? c.videos.map((v,i) => `<a href="${v}" target="_blank">Video ${i+1}</a>`).join(' | ') : 'No videos'}
+      </li>
+    `).join('')
+    : "<li>No courses yet.</li>";
+}
+showCourses();
+
+// Course code unlock
+document.getElementById('codeForm').onsubmit = function(e) {
+  e.preventDefault();
+  const code = this.courseCode.value.trim();
+  const courses = getCourses();
+  const found = courses.find(c => c.courseCode === code);
+  if (found) {
+    document.getElementById('codeMsg').innerHTML =
+      `<h4 style="color:#5C6AC4;">Unlocked: ${found.name}</h4>
+       <p>Details: ${found.details}</p>
+       <p>Rate: ${found.rate || 'N/A'}</p>
+       <p>Playlist Type: ${found.playlistType || 'N/A'}</p>
+       ${found.videos && found.videos.length ? found.videos.map((v,i) => `<a href="${v}" target="_blank">Video ${i+1}</a>`).join(' | ') : 'No videos'}
+      `;
+  } else {
+    document.getElementById('wrongCodePopup').style.display = 'block';
+    document.getElementById('codeMsg').innerHTML = "";
+  }
+};
+</script>
+
+
+  <footer style="background:#5C6AC4;color:#fff;text-align:center;padding:10px 0;margin-top:30px;border-radius:8px;">
+    All rights reserved &copy; 2025 CATAYLST COMPUTER INSTITUTE
+  </footer>
+  <script>
+  const user = JSON.parse(localStorage.getItem('batchUser'));
+  if (user) {
+    document.write(`<p><strong>Welcome! Your Batch ID: ${user.id} | Password: ${user.pass}</strong></p>`);
+  }
+</script>
+</body>
+</html>
