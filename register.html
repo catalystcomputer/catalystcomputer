@@ -1,4 +1,3 @@
-<!-- register.html -->
 <!DOCTYPE html>
 <html>
 <head>
@@ -7,33 +6,67 @@
 </head>
 <body>
   <section>
-    <h2>Register for Batch Access</h2>
+    <h2>Register for Batch Video Access</h2>
     <form id="registerForm">
       <label>Name: <input type="text" name="name" required /></label><br />
       <label>Phone: <input type="text" name="phone" required /></label><br />
-      <label>Batch ID: <input type="text" name="id" required /></label><br />
-      <label>Password: <input type="password" name="pass" required /></label><br />
       <button type="submit">Register</button>
     </form>
     <button onclick="location.href='index.html'" style="margin-top:12px;width:100%;background:#5C6AC4;">Back to Home</button>
     <p id="registerMsg"></p>
   </section>
+
   <script>
+    function generateBatchId() {
+      return 'CAT' + Math.floor(100000 + Math.random() * 900000);
+    }
+    function generatePassword() {
+      const chars = 'ABCDEFGHJKMNPQRSTUVWXYZ23456789';
+      let pass = '';
+      for (let i = 0; i < 6; i++) pass += chars.charAt(Math.floor(Math.random() * chars.length));
+      return pass;
+    }
+    function showPopup(msg) {
+      let popup = document.getElementById('idPassPopup');
+      if (!popup) {
+        popup = document.createElement('div');
+        popup.id = 'idPassPopup';
+        popup.style.position = 'fixed';
+        popup.style.top = '0';
+        popup.style.left = '0';
+        popup.style.width = '100vw';
+        popup.style.height = '100vh';
+        popup.style.background = 'rgba(0,0,0,0.4)';
+        popup.style.zIndex = '9999';
+        popup.innerHTML = `
+          <div style="background:#fff; padding:30px; border-radius:8px; max-width:320px; margin:120px auto; text-align:center; box-shadow:0 4px 16px #aaa;">
+            <h3 style="color:#5C6AC4;">Registration Successful!</h3>
+            <div id="popupMsg"></div>
+            <button onclick="document.getElementById('idPassPopup').remove();" style="width:90%;background:#5C6AC4;">Close</button>
+          </div>
+        `;
+        document.body.appendChild(popup);
+      }
+      popup.querySelector('#popupMsg').innerHTML = msg;
+    }
     document.getElementById('registerForm').onsubmit = function(e) {
       e.preventDefault();
       const name = this.name.value.trim();
       const phone = this.phone.value.trim();
-      const id = this.id.value.trim();
-      const pass = this.pass.value;
-      if (!name || !phone || !id || !pass) {
+      if (!name || !phone) {
         document.getElementById('registerMsg').textContent = "All fields are required!";
         return;
       }
+      const id = generateBatchId();
+      const pass = generatePassword();
       localStorage.setItem('batchUser', JSON.stringify({ name, phone, id, pass }));
-      document.getElementById('registerMsg').textContent = "Registration successful! Redirecting...";
-      setTimeout(() => {
-        window.location.href = 'dashboard.html';
-      }, 1500);
+      const msg = `
+        <b>Your Batch ID:</b> <span style="color:#5C6AC4">${id}</span><br>
+        <b>Password:</b> <span style="color:#5C6AC4">${pass}</span><br>
+        <span style="color:#d32f2f;">Please note down your Batch ID and Password. You will need these to login.</span>
+      `;
+      showPopup(msg);
+      document.getElementById('registerMsg').textContent = "";
     };
   </script>
 </body>
